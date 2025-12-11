@@ -3,6 +3,8 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Usuario } from './usuario/entities/usuario.entity';
 import { UsuarioModule } from './usuario/usuario.module';
+import { ApoliceModule } from './apolice/apolice.module';
+import { Apolice } from './apolice/entities/apolice.entity';
 
 
 @Module({
@@ -16,14 +18,15 @@ import { UsuarioModule } from './usuario/usuario.module';
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: process.env.DB_HOST,
-      port: +(process.env.DB_PORT ?? 3306),
+      port: +(process.env.DB_PORT ?? 3310),//alterar as configurações 
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [Usuario],
+      entities: [Apolice, Usuario],
       synchronize: true,
     }),
-    UsuarioModule
+    ApoliceModule,
+    UsuarioModule,
   ],
   controllers: [],
   providers: [],
