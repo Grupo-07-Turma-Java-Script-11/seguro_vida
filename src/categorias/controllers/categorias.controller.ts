@@ -28,7 +28,7 @@ export class CategoriaController {
   @Get('/:id')
   @HttpCode(HttpStatus.OK)
   findById(@Param('id') id: number,parseIntPipe: ParseIntPipe): Promise<Categoria> {
-    return this.categoriaService.findById(id,);
+    return this.categoriaService.findById(id);
   }
 
   // Criar nova categoria
