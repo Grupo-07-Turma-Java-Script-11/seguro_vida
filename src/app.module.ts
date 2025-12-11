@@ -20,7 +20,7 @@ import { CategoriaModule } from './categorias/categoria.module';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [Categoria],
+      entities: [CategoriaModule],
       synchronize: true,
     }),
     CategoriaModule
