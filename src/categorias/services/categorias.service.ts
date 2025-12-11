@@ -8,20 +8,17 @@ export class CategoriaService {
   constructor(
     @InjectRepository(Categoria)
     private readonly categoriaRepository: Repository<Categoria>,
-  ) {}
+  ) { }
 
   /** Consulta todas as categorias */
   async findAll(): Promise<Categoria[]> {
-    return await this.categoriaRepository.find({
-      relations: ['apolices'],
-    });
+    return await this.categoriaRepository.find();
   }
 
   /** Busca categoria pelo ID */
   async findById(id: number): Promise<Categoria> {
     const categoria = await this.categoriaRepository.findOne({
-      where: { id },
-      relations: ['apolices'],
+      where: { id }
     });
 
     if (!categoria) {

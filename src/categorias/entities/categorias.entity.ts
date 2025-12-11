@@ -16,7 +16,7 @@ export class Categoria {
   @Column({ nullable: false })
   descricao: string;
 
-  @OneToMany(() => Apolice, (apolice) => apolice.categoria)
-  apolices: Apolice[];
+  // @OneToMany(() => Apolice, (apolice) => apolice.categoria)
+  // apolices: Apolice[];
+  // Categoria: Categoria
 }
-Categoria::Categoria

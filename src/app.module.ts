@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CategoriaService } from './categorias/services/categorias.service';
 import { CategoriaModule } from './categorias/categoria.module';
+import { Categoria } from './categorias/entities/categorias.entity';
 
 
 @Module({
@@ -20,7 +20,7 @@ import { CategoriaModule } from './categorias/categoria.module';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [CategoriaModule],
+      entities: [Categoria],
       synchronize: true,
     }),
     CategoriaModule
