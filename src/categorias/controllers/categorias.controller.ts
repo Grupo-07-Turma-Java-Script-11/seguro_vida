@@ -27,7 +27,7 @@ export class CategoriaController {
   // Buscar categoria por ID
   @Get('/:id')
   @HttpCode(HttpStatus.OK)
-  findById(@Param('id') id: number): Promise<Categoria> {
+  findById(@Param('id') id: number,parseIntPipe: ParseIntPipe): Promise<Categoria> {
     return this.categoriaService.findById(id,);
   }
 
@@ -51,7 +51,7 @@ export class CategoriaController {
   // Deletar categoria por ID
   @Delete('/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  delete(@Param('id') id: number): Promise<void> {
+  delete(@Param('id') id: number, parseIntPipe: ParseIntPipe): Promise<void> {
     return this.categoriaService.delete(id);
   }
 }
