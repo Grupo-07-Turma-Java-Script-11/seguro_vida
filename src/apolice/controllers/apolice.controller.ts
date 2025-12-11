@@ -6,7 +6,7 @@ import { get } from "http";
 @Controller("/apolices")
 export class ApoliceController {
     constructor(private readonly apoliceService: ApoliceService) { }
-    
+
     @Get()
     @HttpCode(HttpStatus.OK)
     findAll(): Promise<Apolice[]> {
@@ -15,12 +15,12 @@ export class ApoliceController {
 
     @Get('/:id')
     @HttpCode(HttpStatus.OK)
-    findById(@Param('id', ParseIntPipe)id: number): Promise<Apolice>{
+    findById(@Param('id', ParseIntPipe) id: number): Promise<Apolice> {
         return this.apoliceService.findById(id);
     }
 
-  
-    @Get('/apolice/:apolice') 
+
+    @Get('/apolice/:apolice')
     @HttpCode(HttpStatus.OK)
     findByApolice(@Param('apolice') apolice: number): Promise<Apolice[]> {
         return this.apoliceService.findByApolice(apolice);
@@ -28,19 +28,19 @@ export class ApoliceController {
 
     @Post()
     @HttpCode(HttpStatus.CREATED)
-    create(@Body() apolice: Apolice): Promise <Apolice>{
+    create(@Body() apolice: Apolice): Promise<Apolice> {
         return this.apoliceService.create(apolice);
     }
 
     @Put('/:id')
     @HttpCode(HttpStatus.OK)
-    update(@Param('id') id:number, ParseIntPipe: ParseIntPipe, @Body() apolice: Apolice): Promise<Apolice>{
-        return this.apoliceService.update(apolice);
+    update(@Param('id', ParseIntPipe) id: number, @Body() apolice: Apolice): Promise<Apolice> {
+        return this.apoliceService.update(id, apolice);
     }
 
     @Delete('/:id')
     @HttpCode(HttpStatus.NO_CONTENT)
-    delete(@Param('id', ParseIntPipe)id: number){
+    delete(@Param('id', ParseIntPipe) id: number) {
         return this.apoliceService.delete(id);
     }
 
