@@ -27,7 +27,7 @@ export class CategoriaController {
   // Buscar categoria por ID
   @Get('/:id')
   @HttpCode(HttpStatus.OK)
-  findById(@Param('id') id: number,parseIntPipe: ParseIntPipegit): Promise<Categoria> {
+  findById(@Param('id') id: number,parseIntPipe: ParseIntPipe): Promise<Categoria> {
     return this.categoriaService.findById(id,);
   }
 
