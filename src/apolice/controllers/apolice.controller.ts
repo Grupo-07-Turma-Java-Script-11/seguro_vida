@@ -32,9 +32,9 @@ export class ApoliceController {
         return this.apoliceService.create(apolice);
     }
 
-    @Put()
+    @Put('/:id')
     @HttpCode(HttpStatus.OK)
-    update(@Body()apolice: Apolice): Promise<Apolice>{
+    update(@Param('id') id:number, ParseIntPipe: ParseIntPipe, @Body() apolice: Apolice): Promise<Apolice>{
         return this.apoliceService.update(apolice);
     }
 
