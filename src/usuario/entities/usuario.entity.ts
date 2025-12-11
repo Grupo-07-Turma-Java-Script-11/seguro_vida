@@ -1,0 +1,29 @@
+import { IsNotEmpty } from "class-validator";
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+
+@Entity({ name: "tb_usuarios" })
+export class Usuario { 
+    
+    @IsNotEmpty()
+    @PrimaryGeneratedColumn()
+    id: number; 
+
+    @IsNotEmpty()
+    @Column({ length: 255, nullable: false })
+    nome: string; 
+    
+    @IsNotEmpty()
+    @Column({ length: 255, nullable: false, unique: true })
+    email: string;  
+
+    @Column({ length: 5000, nullable: true })
+    foto: string; 
+
+    @IsNotEmpty()
+    @Column({ length: 255, nullable: false })
+    senha: string;
+    
+    @IsNotEmpty()
+    @Column({ type: "date", nullable: false })
+    data_nascimento: Date;
+}
