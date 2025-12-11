@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Usuario } from './usuario/entities/usuario.entity';
+import { UsuarioModule } from './usuario/usuario.module';
 
 
 @Module({
@@ -22,7 +23,7 @@ import { Usuario } from './usuario/entities/usuario.entity';
       entities: [Usuario],
       synchronize: true,
     }),
-    Usuario
+    UsuarioModule
   ],
   controllers: [],
   providers: [],
