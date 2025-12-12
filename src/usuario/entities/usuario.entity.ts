@@ -35,4 +35,5 @@ export class Usuario {
         onDelete: "CASCADE"
     })
     apolice: Apolice
+    apolices: any;
 }

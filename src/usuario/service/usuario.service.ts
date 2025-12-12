@@ -4,6 +4,7 @@ import { Repository } from "typeorm";
 import { Usuario } from "../entities/usuario.entity";
 import { ApoliceService } from "../../apolice/services/apolice.service";
 
+
 @Injectable()
 export class UsuarioService {
 
@@ -15,28 +16,40 @@ export class UsuarioService {
     ) {}
 
     // Criar
-	async create(usuario: Usuario): Promise<Usuario> {
-    if (usuario.idade < 18) {
+async create(usuario: Usuario): Promise<Usuario> {
+    const idade = this.calcularIdade(usuario.data_nascimento);
+
+    if (idade < 18) {
         throw new HttpException(
-            'Usuário menor de 18 anos não pode contratar seguro de vida.',
+            "Usuário menor de 18 anos não pode contratar seguro de vida",
             HttpStatus.BAD_REQUEST
         );
     }
 
     if (usuario.apolice) {
-        let apolice = await this.apoliceService.findById(usuario.apolice.id);
-
+        const apolice = await this.apoliceService.findById(usuario.apolice.id);
         if (!apolice) {
             throw new HttpException(
-                'Erro ao criar o usuário: Apólice não encontrada',
+                "Erro ao criar o usuário: Apólice não encontrada",
                 HttpStatus.NOT_FOUND
             );
         }
-
-        return await this.usuarioRepository.save(usuario);
     }
 
     return await this.usuarioRepository.save(usuario);
+}
+
+private calcularIdade(dataNascimento: Date): number {
+    const hoje = new Date();
+    const nascimento = new Date(dataNascimento);
+    let idade = hoje.getFullYear() - nascimento.getFullYear();
+    const m = hoje.getMonth() - nascimento.getMonth();
+
+    if (m < 0 || (m === 0 && hoje.getDate() < nascimento.getDate())) {
+        idade--;
+    }
+
+    return idade;
 }
 
 
@@ -44,7 +57,7 @@ export class UsuarioService {
     async findAll(): Promise<Usuario[]> {
         return this.usuarioRepository.find({
             relations: {
-                apolice: true
+                apolices: true
             }
         });
     }
@@ -55,7 +68,7 @@ export class UsuarioService {
             where: { id },
 
             relations:{
-                apolice: true
+                apolices: true
             }
         });
 
