@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { IsNotEmpty } from 'class-validator';
+import { Apolice } from '../../apolice/entities/apolice.entity';
 //import { Apolice } from '../../apolices/entities/apolice.entity';
 
 @Entity({ name: 'tb_categorias' })
@@ -16,7 +17,7 @@ export class Categoria {
   @Column({ nullable: false })
   descricao: string;
 
-  // @OneToMany(() => Apolice, (apolice) => apolice.categoria)
-  // apolices: Apolice[];
+  @OneToMany(() => Apolice, (apolice) => apolice.categoria)
+  apolice: Apolice[];
   // Categoria: Categoria
 }
