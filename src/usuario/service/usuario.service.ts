@@ -16,17 +16,29 @@ export class UsuarioService {
 
     // Criar
 	async create(usuario: Usuario): Promise<Usuario> {
-        if (usuario.apolice) {
-            let apolice = await this.apoliceService.findById(usuario.apolice.id)
+    if (usuario.idade < 18) {
+        throw new HttpException(
+            'Usuário menor de 18 anos não pode contratar seguro de vida.',
+            HttpStatus.BAD_REQUEST
+        );
+    }
 
-            if (!apolice) 
-                throw new HttpException('Erro ao criar o usuário: Apólice não encontrada', HttpStatus.NOT_FOUND);
-            return await this.usuarioRepository.save(usuario);
-            
+    if (usuario.apolice) {
+        let apolice = await this.apoliceService.findById(usuario.apolice.id);
+
+        if (!apolice) {
+            throw new HttpException(
+                'Erro ao criar o usuário: Apólice não encontrada',
+                HttpStatus.NOT_FOUND
+            );
         }
 
         return await this.usuarioRepository.save(usuario);
     }
+
+    return await this.usuarioRepository.save(usuario);
+}
+
 
     // Listar todos
     async findAll(): Promise<Usuario[]> {

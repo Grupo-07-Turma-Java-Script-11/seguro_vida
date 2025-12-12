@@ -1,5 +1,5 @@
 import { IsNotEmpty } from "class-validator";
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Apolice } from "../../apolice/entities/apolice.entity";
 
 @Entity({ name: "tb_usuarios" })
@@ -28,7 +28,10 @@ export class Usuario {
     @Column({ type: "date", nullable: false })
     data_nascimento: Date;
 
-    @ManyToOne(() => Apolice, (apolice) => apolice.usuario,{
+    @Column({ nullable: false })
+    idade: number;
+
+    @OneToMany(() => Apolice, (apolice) => apolice.usuario, {
         onDelete: "CASCADE"
     })
     apolice: Apolice

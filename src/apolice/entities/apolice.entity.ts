@@ -29,7 +29,7 @@ export class Apolice {
     })
     categoria: Categoria
 
-    @OneToMany(() => Usuario, (usuario) => usuario.apolice,{
+    @ManyToOne(() => Usuario, (usuario) => usuario.apolice,{
         onDelete: "CASCADE"
     })
     usuario: Usuario
