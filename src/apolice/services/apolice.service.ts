@@ -12,7 +12,10 @@ export class ApoliceService {
     constructor(
         @InjectRepository(Apolice)
         private apoliceRepository: Repository<Apolice>,
+
+        @Inject(forwardRef(() => CategoriaService))
         private categoriaService: CategoriaService,
+
         @Inject(forwardRef(() => UsuarioService))
         private usuarioService: UsuarioService
     ) { }

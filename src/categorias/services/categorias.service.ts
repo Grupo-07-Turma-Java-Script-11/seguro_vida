@@ -1,19 +1,23 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { forwardRef, HttpException, HttpStatus, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Categoria } from '../entities/categorias.entity';
+import { ApoliceService } from '../../apolice/services/apolice.service';
 
 @Injectable()
 export class CategoriaService {
   constructor(
     @InjectRepository(Categoria)
     private readonly categoriaRepository: Repository<Categoria>,
+
+    @Inject(forwardRef(() => ApoliceService))
+    private readonly apoliceService: ApoliceService,
   ) { }
 
   /** Consulta todas as categorias */
   async findAll(): Promise<Categoria[]> {
     return await this.categoriaRepository.find({
-      relations:{
+      relations: {
         apolice: true
       }
     });
@@ -37,6 +41,17 @@ export class CategoriaService {
 
   /** Criar categoria */
   async create(categoria: Categoria): Promise<Categoria> {
+    if (categoria.apolice && categoria.apolice.length > 0) {
+
+      for (const apoliceItem of categoria.apolice) {
+        const apoliceEncontrado = await this.apoliceService.findById(apoliceItem.id);
+
+        if (!apoliceEncontrado) {
+          throw new HttpException('Apolice não encontrado', HttpStatus.NOT_FOUND);
+        }
+      }
+    }
+
     return await this.categoriaRepository.save(categoria);
   }
 
