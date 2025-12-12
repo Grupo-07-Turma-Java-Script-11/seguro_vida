@@ -3,27 +3,27 @@ import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "ty
 import { Apolice } from "../../apolice/entities/apolice.entity";
 
 @Entity({ name: "tb_usuarios" })
-export class Usuario { 
-    
+export class Usuario {
+
     @IsNotEmpty()
     @PrimaryGeneratedColumn()
-    id: number; 
+    id: number;
 
     @IsNotEmpty()
     @Column({ length: 255, nullable: false })
-    nome: string; 
-    
+    nome: string;
+
     @IsNotEmpty()
     @Column({ length: 255, nullable: false, unique: true })
-    email: string;  
+    email: string;
 
     @Column({ length: 5000, nullable: true })
-    foto: string; 
+    foto: string;
 
     @IsNotEmpty()
     @Column({ length: 255, nullable: false })
     senha: string;
-    
+
     @IsNotEmpty()
     @Column({ type: "date", nullable: false })
     data_nascimento: Date;
@@ -31,9 +31,6 @@ export class Usuario {
     @Column({ nullable: false })
     idade: number;
 
-    @OneToMany(() => Apolice, (apolice) => apolice.usuario, {
-        onDelete: "CASCADE"
-    })
-    apolice: Apolice
-    apolices: any;
+    @OneToMany(() => Apolice, (apolice) => apolice.usuario)
+    apolice: Apolice[];
 }

@@ -13,51 +13,51 @@ export class UsuarioService {
         private usuarioRepository: Repository<Usuario>,
         private apoliceService: ApoliceService
 
-    ) {}
+    ) { }
 
     // Criar
-async create(usuario: Usuario): Promise<Usuario> {
-    const idade = this.calcularIdade(usuario.data_nascimento);
+    async create(usuario: Usuario): Promise<Usuario> {
+        const idade = this.calcularIdade(usuario.data_nascimento);
 
-    if (idade < 18) {
-        throw new HttpException(
-            "Usuário menor de 18 anos não pode contratar seguro de vida",
-            HttpStatus.BAD_REQUEST
-        );
-    }
-
-    if (usuario.apolice) {
-        const apolice = await this.apoliceService.findById(usuario.apolice.id);
-        if (!apolice) {
+        if (idade < 18) {
             throw new HttpException(
-                "Erro ao criar o usuário: Apólice não encontrada",
-                HttpStatus.NOT_FOUND
+                "Usuário menor de 18 anos não pode contratar seguro de vida",
+                HttpStatus.BAD_REQUEST
             );
         }
+
+        if (usuario.apolice) {
+            const apolice = await this.apoliceService.findById(usuario.apolice.id);
+            if (!apolice) {
+                throw new HttpException(
+                    "Erro ao criar o usuário: Apólice não encontrada",
+                    HttpStatus.NOT_FOUND
+                );
+            }
+        }
+
+        return await this.usuarioRepository.save(usuario);
     }
 
-    return await this.usuarioRepository.save(usuario);
-}
+    private calcularIdade(dataNascimento: Date): number {
+        const hoje = new Date();
+        const nascimento = new Date(dataNascimento);
+        let idade = hoje.getFullYear() - nascimento.getFullYear();
+        const m = hoje.getMonth() - nascimento.getMonth();
 
-private calcularIdade(dataNascimento: Date): number {
-    const hoje = new Date();
-    const nascimento = new Date(dataNascimento);
-    let idade = hoje.getFullYear() - nascimento.getFullYear();
-    const m = hoje.getMonth() - nascimento.getMonth();
+        if (m < 0 || (m === 0 && hoje.getDate() < nascimento.getDate())) {
+            idade--;
+        }
 
-    if (m < 0 || (m === 0 && hoje.getDate() < nascimento.getDate())) {
-        idade--;
+        return idade;
     }
-
-    return idade;
-}
 
 
     // Listar todos
     async findAll(): Promise<Usuario[]> {
         return this.usuarioRepository.find({
             relations: {
-                apolices: true
+                apolice: true,
             }
         });
     }
@@ -67,8 +67,8 @@ private calcularIdade(dataNascimento: Date): number {
         const usuario = await this.usuarioRepository.findOne({
             where: { id },
 
-            relations:{
-                apolices: true
+            relations: {
+                apolice: true,
             }
         });
 

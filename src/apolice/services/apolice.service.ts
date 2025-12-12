@@ -15,8 +15,9 @@ export class ApoliceService {
 
     async findAll(): Promise<Apolice[]> {
         return await this.apoliceRepository.find({
-            relations:{
-                categoria: true
+            relations: {
+                categoria: true,
+                usuario: true,
             }
         });
     }
@@ -26,8 +27,9 @@ export class ApoliceService {
             where: {
                 id
             },
-            relations:{
-                categoria: true
+            relations: {
+                categoria: true,
+                usuario: true,
             }
         });
         if (!apolice)
@@ -41,7 +43,8 @@ export class ApoliceService {
                 numero_apolice: apolice
             },
             relations: {
-                categoria: true
+                categoria: true,
+                usuario: true,
             }
         })
     }
@@ -58,12 +61,12 @@ export class ApoliceService {
 
             if (!categoriaEncontrada) {
                 throw new HttpException(
-                    'Categoria não encontrada!',HttpStatus.NOT_FOUND);
-        }
+                    'Categoria não encontrada!', HttpStatus.NOT_FOUND);
+            }
 
             // garante que a categoria carregada é usada
             apolice.categoria = categoriaEncontrada;
-    }
+        }
 
         // Salva a apólice já com categoria carregada
         return await this.apoliceRepository.save(apolice);

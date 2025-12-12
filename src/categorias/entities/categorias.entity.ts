@@ -19,5 +19,4 @@ export class Categoria {
 
   @OneToMany(() => Apolice, (apolice) => apolice.categoria)
   apolice: Apolice[];
-  // Categoria: Categoria
 }
