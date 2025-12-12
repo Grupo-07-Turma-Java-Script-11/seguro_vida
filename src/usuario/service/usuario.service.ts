@@ -17,22 +17,30 @@ export class UsuarioService {
 
     // Criar
     async create(usuario: Usuario): Promise<Usuario> {
-        const idade = this.calcularIdade(usuario.data_nascimento);
+        // 1. Calcula a idade e guarda na constante
+        const idadeCalculada = this.calcularIdade(usuario.data_nascimento);
 
-        if (idade < 18) {
+        // 2. Valida a idade
+        if (idadeCalculada < 18) {
             throw new HttpException(
                 "Usuário menor de 18 anos não pode contratar seguro de vida",
                 HttpStatus.BAD_REQUEST
             );
         }
 
-        if (usuario.apolice) {
-            const apolice = await this.apoliceService.findById(usuario.apolice.id);
-            if (!apolice) {
-                throw new HttpException(
-                    "Erro ao criar o usuário: Apólice não encontrada",
-                    HttpStatus.NOT_FOUND
-                );
+        // CORREÇÃO: Atribui a idade calculada ao objeto usuario antes de salvar
+        usuario.idade = idadeCalculada;
+
+        if (usuario.apolice && usuario.apolice.length > 0) {
+            for (const apoliceItem of usuario.apolice) {
+                const apoliceEncontrada = await this.apoliceService.findById(apoliceItem.id);
+
+                if (!apoliceEncontrada) {
+                    throw new HttpException(
+                        `Erro ao criar o usuário: Apólice com ID ${apoliceItem.id} não encontrada`,
+                        HttpStatus.NOT_FOUND
+                    );
+                }
             }
         }
 

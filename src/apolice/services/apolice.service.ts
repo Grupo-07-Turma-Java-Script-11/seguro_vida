@@ -1,8 +1,10 @@
-import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
+import { forwardRef, HttpException, HttpStatus, Inject, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Apolice } from "../entities/apolice.entity";
 import { DeleteResult, Repository } from "typeorm";
 import { CategoriaService } from "../../categorias/services/categorias.service";
+import { UsuarioService } from "../../usuario/service/usuario.service";
+import { Usuario } from "../../usuario/entities/usuario.entity";
 
 
 @Injectable()
@@ -10,7 +12,9 @@ export class ApoliceService {
     constructor(
         @InjectRepository(Apolice)
         private apoliceRepository: Repository<Apolice>,
-        private categoriaService: CategoriaService
+        private categoriaService: CategoriaService,
+        @Inject(forwardRef(() => UsuarioService))
+        private usuarioService: UsuarioService
     ) { }
 
     async findAll(): Promise<Apolice[]> {
@@ -51,10 +55,7 @@ export class ApoliceService {
 
     async create(apolice: Apolice): Promise<Apolice> {
 
-        // Se a apólice veio com categoria vinculada
         if (apolice.categoria) {
-
-            // Busca a categoria no banco para garantir que existe
             const categoriaEncontrada = await this.categoriaService.findById(
                 apolice.categoria.id
             );
@@ -63,12 +64,22 @@ export class ApoliceService {
                 throw new HttpException(
                     'Categoria não encontrada!', HttpStatus.NOT_FOUND);
             }
-
-            // garante que a categoria carregada é usada
             apolice.categoria = categoriaEncontrada;
         }
 
-        // Salva a apólice já com categoria carregada
+        if (apolice.usuario) {
+            const usuarioEncontrado = await this.usuarioService.findById(
+                apolice.usuario.id
+            );
+
+            if (!usuarioEncontrado) {
+                throw new HttpException(
+                    'Usuário não encontrado!', HttpStatus.NOT_FOUND);
+            }
+
+            apolice.usuario = usuarioEncontrado;
+        }
+
         return await this.apoliceRepository.save(apolice);
     }
 
