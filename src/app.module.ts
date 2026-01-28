@@ -7,6 +7,7 @@ import { Usuario } from './usuario/entities/usuario.entity';
 import { UsuarioModule } from './usuario/usuario.module';
 import { ApoliceModule } from './apolice/apolice.module';
 import { Apolice } from './apolice/entities/apolice.entity';
+import { ProdService } from './data/services/prod.service';
 
 
 @Module({
@@ -17,15 +18,10 @@ import { Apolice } from './apolice/entities/apolice.entity';
     }),
 
     // configurar acesso ao banco de dados
-    TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: process.env.DB_HOST,
-      port: +(process.env.DB_PORT ?? 3306),
-      username: process.env.DB_USERNAME,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_NAME,
-      entities: [Apolice, Usuario, Categoria],
-      synchronize: true,
+    ConfigModule.forRoot(),
+    TypeOrmModule.forRootAsync({
+      useClass: ProdService,
+      imports: [ConfigModule],
     }),
     ApoliceModule,
     UsuarioModule,
